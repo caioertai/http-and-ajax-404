@@ -1,4 +1,4 @@
-//// Assign a behaviour to an Algolia Search form
+// // Assign a behaviour to an Algolia Search form
 const placeInput = document.querySelector("#place");
 
 // Add a listener (behaviour) to the algolia input
@@ -10,24 +10,20 @@ placeInput.addEventListener("keyup", (event) => {
     body: JSON.stringify({ query: userInput })
   }).then(response => response.json())
     .then((data) => {
-      console.log(data)
-    })
-})
+      console.log(data);
+    });
+});
 
-//// Assing a movie search behaviour to the Find movies form
+// // Assing a movie search behaviour to the Find movies form
 const results = document.querySelector("#results");
 const search = document.querySelector("#search-movies");
 
-const keyword_input = document.querySelector("#keyword");
+const keywordInput = document.querySelector("#keyword");
 
-const fetchAndDisplayMovies = (user_input) => {
-  // Cleanup results
-  results.innerHTML = "";
-
-  fetch(`http://www.omdbapi.com/?s=${user_input}&apikey=adf1f2d7`)
-    .then((response => response.json())) // <--- parsing response
+const fetchAndDisplayMovies = (query) => {
+  fetch(`http://www.omdbapi.com/?s=${query}&apikey=adf1f2d7`)
+    .then(response => response.json())
     .then((data) => {
-      // data => { Search: [] }
       const movies = data.Search; // => []
 
       movies.forEach((movie) => {
@@ -40,16 +36,17 @@ const fetchAndDisplayMovies = (user_input) => {
 
         // Adding movie
         results.insertAdjacentHTML("beforeEnd", movieTag);
-      })
+      });
     });
-}
+};
 
 
 // search #=> form
 search.addEventListener("submit", (event) => {
   event.preventDefault();
-  const user_input = keyword_input.value;
-  fetchAndDisplayMovies(user_input); // <-----
+  results.innerHTML = "";
+  const userInput = keywordInput.value;
+  fetchAndDisplayMovies(userInput);
 });
 
 fetchAndDisplayMovies("harry potter");
