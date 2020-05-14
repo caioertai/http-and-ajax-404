@@ -1,52 +1,17 @@
-// // Assign a behaviour to an Algolia Search form
-const placeInput = document.querySelector("#place");
+// Importing plugins or modules
+import { fetchAndDisplayMovies, handleMoviesSearch } from "./movies";
+import { initSortable } from "./plugins/init_sortable";
+import { initMarkdown } from "./plugins/init_markdown";
+import { initSelect2 } from "./plugins/init_select2";
 
-// Add a listener (behaviour) to the algolia input
-placeInput.addEventListener("keyup", (event) => {
-  const userInput = event.currentTarget.value;
-
-  fetch("https://places-dsn.algolia.net/1/places/query", {
-    method: "POST",
-    body: JSON.stringify({ query: userInput })
-  }).then(response => response.json())
-    .then((data) => {
-      console.log(data);
-    });
-});
-
-// // Assing a movie search behaviour to the Find movies form
-const results = document.querySelector("#results");
+// Assigning behaviors
 const search = document.querySelector("#search-movies");
+search.addEventListener("submit", handleMoviesSearch);
 
-const keywordInput = document.querySelector("#keyword");
+// Initializing plugins
+initSortable();
+initMarkdown();
+initSelect2();
 
-const fetchAndDisplayMovies = (query) => {
-  fetch(`http://www.omdbapi.com/?s=${query}&apikey=adf1f2d7`)
-    .then(response => response.json())
-    .then((data) => {
-      const movies = data.Search; // => []
-
-      movies.forEach((movie) => {
-        const movieTag = `
-          <li class="list-inline-item">
-            <img src="${movie.Poster}"/>
-            <p>${movie.Title}</p>
-          </li>
-        `;
-
-        // Adding movie
-        results.insertAdjacentHTML("beforeEnd", movieTag);
-      });
-    });
-};
-
-
-// search #=> form
-search.addEventListener("submit", (event) => {
-  event.preventDefault();
-  results.innerHTML = "";
-  const userInput = keywordInput.value;
-  fetchAndDisplayMovies(userInput);
-});
-
+// Ajax calls
 fetchAndDisplayMovies("harry potter");
